@@ -48,7 +48,7 @@ Instead of reading the entire product tree every time the differences screen ope
 When someone opens a product to check it, a soft lock marks it as "being checked by X". If their app closes or loses connection, an `onDisconnect` handler resets it to "open" so nothing stays stuck. Stock totals are updated with Realtime Database **transactions**, so two people counting the same bin can't overwrite each other.
 
 **4. Server-enforced access control.**
-Users sign in once with Google. Write access isn't trusted to the client — Firebase rules deny everything by default and only allow reads/writes from accounts on a whitelist (`/users`) in the database. That whitelist can't be edited from the app (it's managed out-of-band), so a user can't add themselves or escalate, and each user can only read their own record.
+Users sign in once with Google. Write access isn't trusted to the client — Firebase rules deny everything by default and only allow reads/writes from accounts on a whitelist in the database. That whitelist can't be edited from the app (it's managed out-of-band), so a user can't add themselves or escalate, and each user can only read their own record.
 
 ---
 
