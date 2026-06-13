@@ -2,16 +2,13 @@
 
 A native Android app for warehouse stock-taking. Staff scan product barcodes to record counts, the app reconciles the physical count against the expected stock, and a correction flow resolves the differences — all in real time, across multiple people counting at once.
 
+🎥 **Demo video:** https://youtube.com/shorts/ZfMz1etkt04
+
 > Built with Kotlin, Firebase Realtime Database, and ML Kit. Stock data is loaded into Firebase from the company's Excel exports via a separate Python script.
 
 **Status:** In production — used to run full stock-takes of large warehouses, with no data issues.
 
 ---
-
-## Demo
-
-https://youtube.com/shorts/ZfMz1etkt04
-
 
 ## What it does
 
@@ -22,6 +19,20 @@ https://youtube.com/shorts/ZfMz1etkt04
 - **Multi-user, real-time** — several people can count the same warehouse at once; the app shows who is currently checking each item
 - **Role-based views** — admins see expected vs. counted; regular users see only what they need
 - **In-app updates** — checks a version file and installs new builds over the air
+
+---
+
+## Built for the floor
+
+The small things that make it usable during a real stock-take, not just a demo:
+
+- **Unknown barcode? Add it on the spot.** Scan a code that isn't in the database and the app immediately asks for a description (and optionally a quantity) — then registers it as a new product, keyed by the scanned barcode, without breaking the counting flow.
+- **Optional fields stay optional.** Quantity, shelf and position aren't forced — you can scan-and-go and fill details only when they matter.
+- **Continuous scanning For Serialized Warehouses** After a successful entry it jumps straight back to the scanner, so you can run through a shelf without tapping between items.
+- **Inputs are normalised automatically** — barcodes/case numbers are upper-cased and stripped of stray leading symbols, so the same item always lands on the same key.
+- **Remembers your context** — your location, shelf and position persist between scans (and survive logout of just the work session), so you're not re-entering them constantly.
+- **Audio + visual confirmation** — a success/failure sound and a check/cross dialog, so you know each scan registered without staring at the screen.
+- **Auto-login** — if you're already signed in with a saved location/warehouse, it drops you straight into counting.
 
 ---
 
@@ -48,8 +59,20 @@ Instead of reading the entire product tree every time the differences screen ope
 When someone opens a product to check it, a soft lock marks it as "being checked by X". If their app closes or loses connection, an `onDisconnect` handler resets it to "open" so nothing stays stuck. Stock totals are updated with Realtime Database **transactions**, so two people counting the same bin can't overwrite each other.
 
 **4. Server-enforced access control.**
-Users sign in once with Google. Write access isn't trusted to the client — Firebase rules deny everything by default and only allow reads/writes from accounts on a whitelist in the database. That whitelist can't be edited from the app (it's managed out-of-band), so a user can't add themselves or escalate, and each user can only read their own record.
+Users sign in once with Google. Write access isn't trusted to the client — Firebase rules deny everything by default and only allow reads/writes from accounts on a whitelist (`/users`) in the database. That whitelist can't be edited from the app (it's managed out-of-band), so a user can't add themselves or escalate, and each user can only read their own record.
 
 ---
 
-*Built by Ioannis Kermizidis to solve a real warehouse Cycle-Count Problem.*
+## Architecture & roadmap
+
+The app grew feature-by-feature, so the screens currently hold their own Firebase logic. If I were taking it further, my next steps would be:
+
+- Extract all database access into a single **repository layer** (the screens shouldn't talk to Firebase directly)
+- Add server-side `.validate` rules and role checks, so the whitelist grants *scoped* access instead of full read/write (roles are currently enforced in the app, not the rules)
+- Make the multi-step writes **atomic** with a single `updateChildren()` instead of chained writes
+- Add automated tests around the difference and correction logic
+- Move barcode imports into the app instead of a separate script
+
+---
+
+*Built by Ioannis Kermizidis to solve a real warehouse stock-taking problem.*
