@@ -1,4 +1,4 @@
-# Apografi — Warehouse Inventory Android App
+# ApografiApp — Warehouse Inventory Android App
 
 A native Android app for warehouse stock-taking. Staff scan product barcodes to record counts, the app reconciles the physical count against the expected stock, and a correction flow resolves the differences — all in real time, across multiple people counting at once.
 
