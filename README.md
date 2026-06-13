@@ -63,16 +63,4 @@ Users sign in once with Google. Write access isn't trusted to the client — Fir
 
 ---
 
-## Architecture & roadmap
-
-The app grew feature-by-feature, so the screens currently hold their own Firebase logic. If I were taking it further, my next steps would be:
-
-- Extract all database access into a single **repository layer** (the screens shouldn't talk to Firebase directly)
-- Add server-side `.validate` rules and role checks, so the whitelist grants *scoped* access instead of full read/write (roles are currently enforced in the app, not the rules)
-- Make the multi-step writes **atomic** with a single `updateChildren()` instead of chained writes
-- Add automated tests around the difference and correction logic
-- Move barcode imports into the app instead of a separate script
-
----
-
 *Built by Ioannis Kermizidis to solve a real warehouse stock-taking problem.*
