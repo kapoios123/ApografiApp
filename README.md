@@ -10,7 +10,7 @@ A native Android app for warehouse stock-taking. Staff scan product barcodes to 
 
 ## Demo
 
-<!-- Σύρε εδώ το βίντεο (το ανεβάζει το GitHub και παίζει inline) -->
+https://youtube.com/shorts/ZfMz1etkt04
 
 
 ## What it does
